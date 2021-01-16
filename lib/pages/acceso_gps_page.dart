@@ -31,6 +31,9 @@ class _AccesoGpsPageState extends State<AccesoGpsPage> with WidgetsBindingObserv
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async{
 
+
+      print(state);
+
       if(state == AppLifecycleState.resumed){
           final tienePermiso = await Permission.location.isGranted;
           if (tienePermiso){
