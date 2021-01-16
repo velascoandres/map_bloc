@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:map_bloc/helpers/helpers.dart';
+import 'package:map_bloc/pages/acceso_gps_page.dart';
 import 'package:map_bloc/pages/home_page.dart';
 
 class LoadingPage extends StatelessWidget {
@@ -26,9 +27,13 @@ class LoadingPage extends StatelessWidget {
     // TODO: Gps esta activo
 
     await Future.delayed(Duration(milliseconds: 2000));
+    // Navigator.pushReplacement(
+    //   context,
+    //   navegarFadeIn(context, MapaPage()),
+    // );
     Navigator.pushReplacement(
       context,
-      navegarFadeIn(context, MapaPage()),
+      navegarFadeIn(context, AccesoGpsPage()),
     );
   }
 }
