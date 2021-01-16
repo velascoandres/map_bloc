@@ -5,8 +5,45 @@ import 'package:map_bloc/pages/acceso_gps_page.dart';
 import 'package:map_bloc/pages/home_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class LoadingPage extends StatelessWidget {
+class LoadingPage extends StatefulWidget {
   const LoadingPage({Key key}) : super(key: key);
+
+  @override
+  _LoadingPageState createState() => _LoadingPageState();
+}
+
+class _LoadingPageState extends State<LoadingPage> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      final tienePermiso = await Permission.location.isGranted;
+      final gpsActivo = await Geolocator.isLocationServiceEnabled();
+
+
+      print(tienePermiso);
+      print(gpsActivo);
+
+
+      if (tienePermiso && gpsActivo) {
+        Navigator.pushReplacement(
+          context,
+          navegarFadeIn(context, MapaPage()),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

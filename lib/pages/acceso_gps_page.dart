@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart' as geo;
 import 'package:permission_handler/permission_handler.dart';
 
 class AccesoGpsPage extends StatefulWidget {
@@ -8,11 +9,9 @@ class AccesoGpsPage extends StatefulWidget {
   _AccesoGpsPageState createState() => _AccesoGpsPageState();
 }
 
-class _AccesoGpsPageState extends State<AccesoGpsPage> with WidgetsBindingObserver{
-  
-
-
-
+class _AccesoGpsPageState extends State<AccesoGpsPage>
+    with WidgetsBindingObserver {
+  bool activoGps = true;
 
   @override
   void initState() {
@@ -20,30 +19,22 @@ class _AccesoGpsPageState extends State<AccesoGpsPage> with WidgetsBindingObserv
     super.initState();
   }
 
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async{
-
-
-      print(state);
-
-      if(state == AppLifecycleState.resumed){
-          final tienePermiso = await Permission.location.isGranted;
-          if (tienePermiso){
-            Navigator.pushReplacementNamed(context, 'loading');
-          }
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      final tienePermiso = await Permission.location.isGranted;
+      if (tienePermiso) {
+        Navigator.pushReplacementNamed(context, 'loading');
       }
-
+    }
   }
-  
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,16 +43,26 @@ class _AccesoGpsPageState extends State<AccesoGpsPage> with WidgetsBindingObserv
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Es necesario el GPS para usar esta app'),
-            MaterialButton(
-              child: Text('Solicitar Acceso',
-                  style: TextStyle(color: Colors.white)),
-              color: Colors.black,
-              shape: StadiumBorder(),
-              elevation: 0,
-              splashColor: Colors.transparent,
-              onPressed: () async {
-                final status = await Permission.location.request();
-                this.accesoGps(status);
+            FutureBuilder(
+              future: geo.Geolocator.isLocationServiceEnabled(),
+              builder: (_, AsyncSnapshot<bool> snapshot) {
+
+                if (snapshot.data) {
+
+                  return MaterialButton(
+                    child: Text('Solicitar Acceso',
+                        style: TextStyle(color: Colors.white)),
+                    color: Colors.black,
+                    shape: StadiumBorder(),
+                    elevation: 0,
+                    splashColor: Colors.transparent,
+                    onPressed: () async {
+                      final status = await Permission.location.request();
+                      this.accesoGps(status);
+                    },
+                  );
+                }
+                return Text('Active GPS');
               },
             ),
           ],
