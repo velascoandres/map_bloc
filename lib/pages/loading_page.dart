@@ -31,9 +31,10 @@ class LoadingPage extends StatelessWidget {
     //   context,
     //   navegarFadeIn(context, MapaPage()),
     // );
-    Navigator.pushReplacement(
-      context,
-      navegarFadeIn(context, AccesoGpsPage()),
-    );
+    // Navigator.pushReplacement(
+    //   context,
+    //   navegarFadeIn(context, AccesoGpsPage()),
+    // );
+    print('Loading page');
   }
 }
