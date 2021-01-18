@@ -46,9 +46,7 @@ class _AccesoGpsPageState extends State<AccesoGpsPage>
             FutureBuilder(
               future: geo.Geolocator.isLocationServiceEnabled(),
               builder: (_, AsyncSnapshot<bool> snapshot) {
-
-                if (snapshot.data) {
-
+                if (snapshot.hasData && snapshot.data) {
                   return MaterialButton(
                     child: Text('Solicitar Acceso',
                         style: TextStyle(color: Colors.white)),
