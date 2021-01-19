@@ -12,15 +12,14 @@ class MiUbicacionState {
     this.ubicacion,
   });
 
-
-  MiUbicacionState copyWith(
+  MiUbicacionState copyWith({
     bool siguiendo,
     bool existeUbicacion,
     LatLng ubicacion,
-  ) => new MiUbicacionState(
-    siguiendo: siguiendo ?? this.siguiendo,
-    existeUbicacion: existeUbicacion ?? this.existeUbicacion,
-    ubicacion: ubicacion ?? this.ubicacion,
-  );
-
+  }) =>
+      new MiUbicacionState(
+        siguiendo: siguiendo ?? this.siguiendo,
+        existeUbicacion: existeUbicacion ?? this.existeUbicacion,
+        ubicacion: ubicacion ?? this.ubicacion,
+      );
 }

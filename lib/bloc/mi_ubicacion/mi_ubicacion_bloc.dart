@@ -24,6 +24,8 @@ class MiUbicacionBloc extends Bloc<MiUbicacionEvent, MiUbicacionState> {
     ).listen(
       (Position position) {
         print(position);
+        final ubicacionNueva = new LatLng(position.latitude, position.longitude);
+        add(OnUbicacionCambio(ubicacionNueva));
       },
     );
   }
@@ -36,5 +38,13 @@ class MiUbicacionBloc extends Bloc<MiUbicacionEvent, MiUbicacionState> {
   @override
   Stream<MiUbicacionState> mapEventToState(
     MiUbicacionEvent event,
-  ) async* {}
+  ) async* {
+
+    if(event is OnUbicacionCambio){
+      yield state.copyWith(
+        existeUbicacion: true,
+        ubicacion: event.ubicacion,
+      );
+    }
+  }
 }
