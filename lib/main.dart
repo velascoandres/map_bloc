@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:map_bloc/pages/acceso_gps_page.dart';
-import 'package:map_bloc/pages/home_page.dart';
+import 'package:map_bloc/pages/mapa_page.dart';
 import 'package:map_bloc/pages/loading_page.dart';
  
 void main() => runApp(MyApp());

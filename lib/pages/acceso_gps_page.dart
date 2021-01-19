@@ -48,8 +48,10 @@ class _AccesoGpsPageState extends State<AccesoGpsPage>
               builder: (_, AsyncSnapshot<bool> snapshot) {
                 if (snapshot.hasData && snapshot.data) {
                   return MaterialButton(
-                    child: Text('Solicitar Acceso',
-                        style: TextStyle(color: Colors.white)),
+                    child: Text(
+                      'Solicitar Acceso',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     color: Colors.black,
                     shape: StadiumBorder(),
                     elevation: 0,

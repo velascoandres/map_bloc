@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:map_bloc/helpers/helpers.dart';
 import 'package:map_bloc/pages/acceso_gps_page.dart';
-import 'package:map_bloc/pages/home_page.dart';
+import 'package:map_bloc/pages/mapa_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class LoadingPage extends StatefulWidget {
