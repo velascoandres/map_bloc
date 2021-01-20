@@ -13,6 +13,8 @@ class _AccesoGpsPageState extends State<AccesoGpsPage>
     with WidgetsBindingObserver {
   bool activoGps = true;
 
+  bool popup = false;
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -43,26 +45,20 @@ class _AccesoGpsPageState extends State<AccesoGpsPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Es necesario el GPS para usar esta app'),
-            FutureBuilder(
-              future: geo.Geolocator.isLocationServiceEnabled(),
-              builder: (_, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.hasData && snapshot.data) {
-                  return MaterialButton(
-                    child: Text(
-                      'Solicitar Acceso',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    color: Colors.black,
-                    shape: StadiumBorder(),
-                    elevation: 0,
-                    splashColor: Colors.transparent,
-                    onPressed: () async {
-                      final status = await Permission.location.request();
-                      this.accesoGps(status);
-                    },
-                  );
-                }
-                return Text('Active GPS');
+            MaterialButton(
+              child: Text(
+                'Solicitar Acceso',
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.black,
+              shape: StadiumBorder(),
+              elevation: 0,
+              splashColor: Colors.transparent,
+              onPressed: () async {
+                popup = true;
+                final status = await Permission.location.request();
+                await this.accesoGps(status);
+                popup = false;
               },
             ),
           ],
@@ -71,10 +67,10 @@ class _AccesoGpsPageState extends State<AccesoGpsPage>
     );
   }
 
-  void accesoGps(PermissionStatus status) {
+  Future<void> accesoGps(PermissionStatus status) async {
     switch (status) {
       case PermissionStatus.granted:
-        Navigator.pushReplacementNamed(context, 'mapa');
+        await Navigator.pushReplacementNamed(context, 'loading');
         break;
       case PermissionStatus.undetermined:
       case PermissionStatus.denied:
