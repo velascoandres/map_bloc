@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_bloc/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
 
 class MapaPage extends StatefulWidget {
@@ -38,6 +39,18 @@ class _MapaPageState extends State<MapaPage> {
         child: Text('Ubicando...'),
       );
 
-    return Text('${state.ubicacion.latitude}, ${state.ubicacion.longitude}');
+    final camaraPosicion = new CameraPosition(
+      target: state.ubicacion,
+      zoom: 15,
+    );
+
+    // return Text('${state.ubicacion.latitude}, ${state.ubicacion.longitude}');
+
+    return GoogleMap(
+      initialCameraPosition: camaraPosicion,
+      mapType: MapType.normal,
+      compassEnabled: true,
+      myLocationEnabled: false,
+    );
   }
 }
