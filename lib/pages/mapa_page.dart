@@ -55,7 +55,7 @@ class _MapaPageState extends State<MapaPage> {
       mapType: MapType.normal,
       compassEnabled: true,
       myLocationEnabled: true,
-      zoomControlsEnabled: false,
+      zoomControlsEnabled: true,
       myLocationButtonEnabled: false,
       onMapCreated: mapaBloc.initMapa,
     );

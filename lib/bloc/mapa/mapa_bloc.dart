@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_bloc/themes/uber_map_theme.dart';
 import 'package:meta/meta.dart';
 
 part 'mapa_event.dart';
@@ -20,7 +22,9 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
       if(!state.mapaListo){
         this._mapController = controller;
 
-        // TODO: Cambiar el estilo del mapa
+        this._mapController.setMapStyle(
+          jsonEncode(UBER_MAP_THEME)
+        );
 
         add(OnMapaListo());
 
