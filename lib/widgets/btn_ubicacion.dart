@@ -1,13 +1,12 @@
 part of 'widgets.dart';
 
 class BtnUbicacion extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     final MapaBloc mapaBloc = context.watch<MapaBloc>();
-    final MiUbicacionBloc ubicacionBloc = context.watch<MiUbicacionBloc>();
-
+    final LatLng destino = context.select(
+      (MiUbicacionBloc miUbicacionBloc) => miUbicacionBloc.state.ubicacion,
+    );
 
     return Container(
       margin: EdgeInsets.only(bottom: 10),
@@ -19,8 +18,7 @@ class BtnUbicacion extends StatelessWidget {
             Icons.my_location,
             color: Colors.black87,
           ),
-          onPressed: (){
-            final destino = ubicacionBloc.state.ubicacion;
+          onPressed: () {
             mapaBloc.moverCamara(destino);
           },
         ),
