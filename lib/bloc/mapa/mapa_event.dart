@@ -12,3 +12,4 @@ class OnNuevaUbicacion extends MapaEvent {
 
 
 class OnMarcarRecorrido extends MapaEvent {}
+class OnSeguirUbicacion extends MapaEvent {}
