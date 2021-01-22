@@ -50,6 +50,8 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
       yield* this._onMarcarRecorrido(event);
     } else if (event is OnSeguirUbicacion) {
       yield* this._onSeguirUbicacion(event);
+    }else if (event is OnMovioMapa){
+      yield* this._onMovioMapa(event);
     }
   }
 
@@ -93,5 +95,15 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     yield state.copyWith(
       seguirUbicacion: nuevoValor,
     );
+  }
+
+  Stream<MapaState> _onMovioMapa(OnMovioMapa event) async*{
+
+    print(event.centroMapa);
+
+    yield state.copyWith(
+      ubicacionCentral: event.centroMapa,
+    );
+
   }
 }

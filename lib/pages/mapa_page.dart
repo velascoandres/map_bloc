@@ -13,6 +13,8 @@ class MapaPage extends StatefulWidget {
 }
 
 class _MapaPageState extends State<MapaPage> {
+  LatLng ultimaPosicion;
+
   @override
   void initState() {
     context.read<MiUbicacionBloc>().iniciarSeguimiendo();
@@ -73,6 +75,13 @@ class _MapaPageState extends State<MapaPage> {
       myLocationButtonEnabled: false,
       onMapCreated: mapaBloc.initMapa,
       polylines: mapaBloc.state.polylines.values.toSet(),
+      onCameraMove: (CameraPosition position) {
+        this.ultimaPosicion = position.target;
+      },
+      onCameraIdle: () {
+        print('Idle');
+        mapaBloc.add(OnMovioMapa(this.ultimaPosicion));
+      },
     );
   }
 }
