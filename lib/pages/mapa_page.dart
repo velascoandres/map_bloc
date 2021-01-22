@@ -35,7 +35,7 @@ class _MapaPageState extends State<MapaPage> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-            BtnUbicacion(),
+          BtnUbicacion(),
         ],
       ),
     );
@@ -52,8 +52,13 @@ class _MapaPageState extends State<MapaPage> {
       zoom: 15,
     );
 
-
     final mapaBloc = context.read<MapaBloc>();
+
+    mapaBloc.add(
+      OnNuevaUbicacion(
+        state.ubicacion,
+      ),
+    );
 
     // return Text('${state.ubicacion.latitude}, ${state.ubicacion.longitude}');
 
@@ -65,6 +70,7 @@ class _MapaPageState extends State<MapaPage> {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
       onMapCreated: mapaBloc.initMapa,
+      polylines: mapaBloc.state.polylines.values.toSet(),
     );
   }
 }
