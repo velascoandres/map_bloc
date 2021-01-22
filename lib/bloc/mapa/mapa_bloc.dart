@@ -43,23 +43,27 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     MapaEvent event,
   ) async* {
     if (event is OnMapaListo) {
-      yield MapaState().copyWith(mapaListo: true);
-    }
+      yield state.copyWith(mapaListo: true);
+    } else if (event is OnNuevaUbicacion) {
+      final List<LatLng> points = [...this._miRuta.points, event.ubicacion];
 
-    if (event is OnNuevaUbicacion) {
-      List<LatLng> points = [
-        ...this._miRuta.points,
-        event.ubicacion,
-      ];
-
-      this._miRuta = this._miRuta.copyWith(
-        pointsParam: points,
-      );
+      this._miRuta = this._miRuta.copyWith(pointsParam: points);
 
       final currentPolylines = state.polylines;
       currentPolylines['mi_ruta'] = this._miRuta;
 
-      yield MapaState().copyWith(
+      yield state.copyWith(polylines: currentPolylines);
+    } else if (event is OnMarcarRecorrido) {
+      final bool nuevoValor = !state.dibujarRecorrido;
+      Color colorRuta = nuevoValor ? Colors.black87 : Colors.transparent;
+
+      this._miRuta = this._miRuta.copyWith(colorParam: colorRuta);
+
+      final currentPolylines = state.polylines;
+      currentPolylines['mi_ruta'] = this._miRuta;
+
+      yield state.copyWith(
+        dibujarRecorrido: !state.dibujarRecorrido,
         polylines: currentPolylines,
       );
     }

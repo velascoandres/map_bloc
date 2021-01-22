@@ -9,3 +9,6 @@ class OnNuevaUbicacion extends MapaEvent {
   final LatLng ubicacion;
   OnNuevaUbicacion(this.ubicacion);
 }
+
+
+class OnMarcarRecorrido extends MapaEvent {}

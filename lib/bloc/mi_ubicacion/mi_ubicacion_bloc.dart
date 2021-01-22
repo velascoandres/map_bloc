@@ -23,7 +23,6 @@ class MiUbicacionBloc extends Bloc<MiUbicacionEvent, MiUbicacionState> {
       distanceFilter: 10, // emita luego de 10 metros
     ).listen(
       (Position position) {
-        print(position);
         final ubicacionNueva = new LatLng(position.latitude, position.longitude);
         add(OnUbicacionCambio(ubicacionNueva));
       },
