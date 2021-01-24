@@ -4,9 +4,12 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BusquedaBloc, BusquedaState>(
-      builder: (context, state){
-        if(!state.seleccionManual){
-          return this.buildSearchBar(context);
+      builder: (context, state) {
+        if (!state.seleccionManual) {
+          return FadeInDown(
+            duration: Duration(milliseconds: 500),
+            child: this.buildSearchBar(context),
+            );
         }
         return Container();
       },
@@ -25,13 +28,13 @@ class SearchBar extends StatelessWidget {
           );
           this.retornoBusqueda(context, resultado);
 
-          // 
+          //
 
-         if(resultado.manual){
+          if (resultado.manual) {
             busquedaBloc.add(OnActivarMarcadorManual());
-         } else if(resultado.cancelo){
+          } else if (resultado.cancelo) {
             busquedaBloc.add(OnDesactivarMarcadorManual());
-         }
+          }
         },
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 30),

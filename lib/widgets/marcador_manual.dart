@@ -27,26 +27,32 @@ class _BuidlMarcadorManual extends StatelessWidget {
         Positioned(
           top: 70,
           left: 20,
-          child: CircleAvatar(
-            maxRadius: 25,
-            backgroundColor: Colors.white,
-            child: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.black87,
+          child: FadeInLeft(
+            duration: Duration(milliseconds: 1000),
+            child: CircleAvatar(
+              maxRadius: 25,
+              backgroundColor: Colors.white,
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black87,
+                ),
+                onPressed: () {
+                  busquedaBloc.add(OnDesactivarMarcadorManual());
+                },
               ),
-              onPressed: () {
-                busquedaBloc.add(OnDesactivarMarcadorManual());
-              },
             ),
           ),
         ),
         Center(
           child: Transform.translate(
             offset: Offset(0, -12),
-            child: Icon(
-              Icons.location_on,
-              size: 50,
+            child: BounceInDown(
+              from: 200,
+              child: Icon(
+                Icons.location_on,
+                size: 50,
+              ),
             ),
           ),
         ),
@@ -54,18 +60,21 @@ class _BuidlMarcadorManual extends StatelessWidget {
         Positioned(
           bottom: 70,
           left: 40,
-          child: MaterialButton(
-            color: Colors.black,
-            elevation: 0,
-            shape: StadiumBorder(),
-            child: Text(
-              'Confirmar destino',
-              style: TextStyle(
-                color: Colors.white,
+          child: FadeIn(
+            duration: Duration(seconds: 1),
+            child: MaterialButton(
+              color: Colors.black,
+              elevation: 0,
+              shape: StadiumBorder(),
+              child: Text(
+                'Confirmar destino',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
+              onPressed: () {},
+              minWidth: width - 120,
             ),
-            onPressed: () {},
-            minWidth: width - 120,
           ),
         ),
       ],
