@@ -31,8 +31,16 @@ class _MapaPageState extends State<MapaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<MiUbicacionBloc, MiUbicacionState>(
-        builder: (_, state) => crearMapa(state),
+      body: Stack(
+        children: [
+          BlocBuilder<MiUbicacionBloc, MiUbicacionState>(
+            builder: (_, state) => crearMapa(state),
+          ),
+          Positioned(
+            top: 10,
+            child: SearchBar(),
+          ),
+        ],
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -79,7 +87,6 @@ class _MapaPageState extends State<MapaPage> {
         this.ultimaPosicion = position.target;
       },
       onCameraIdle: () {
-        print('Idle');
         mapaBloc.add(OnMovioMapa(this.ultimaPosicion));
       },
     );

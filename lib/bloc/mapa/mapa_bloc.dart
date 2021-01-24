@@ -99,7 +99,6 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
 
   Stream<MapaState> _onMovioMapa(OnMovioMapa event) async*{
 
-    print(event.centroMapa);
 
     yield state.copyWith(
       ubicacionCentral: event.centroMapa,
