@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:map_bloc/models/search_result.dart';
 
-class SearchDestionation extends SearchDelegate {
+class SearchDestionation extends SearchDelegate<SearchResult> {
   @override
   final String searchFieldLabel;
 
@@ -18,10 +19,11 @@ class SearchDestionation extends SearchDelegate {
 
   @override
   Widget buildLeading(BuildContext context) {
-    // TODO: retornar algo
+    final searchResult = SearchResult(cancelo: true);
+
     return IconButton(
       icon: Icon(Icons.arrow_back),
-      onPressed: () => this.close(context, null),
+      onPressed: () => this.close(context, searchResult),
     );
   }
 
@@ -38,8 +40,10 @@ class SearchDestionation extends SearchDelegate {
           leading: Icon(Icons.location_on),
           title: Text('Colocar ubicación manualmente'),
           onTap: () {
-            // TODO: retornar algo
-            this.close(context, null);
+            this.close(
+              context,
+              SearchResult(cancelo: false, manual: true),
+            );
           },
         ),
       ],
