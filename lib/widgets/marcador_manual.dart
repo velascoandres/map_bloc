@@ -65,6 +65,7 @@ class _BuidlMarcadorManual extends StatelessWidget {
             child: MaterialButton(
               color: Colors.black,
               elevation: 0,
+              splashColor: Colors.transparent,
               shape: StadiumBorder(),
               child: Text(
                 'Confirmar destino',
@@ -72,12 +73,43 @@ class _BuidlMarcadorManual extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+
+                  this.calcularDestino(context);
+
+              },
               minWidth: width - 120,
             ),
           ),
         ),
       ],
     );
+  }
+
+  void calcularDestino(BuildContext context) async{
+
+    final trafficService = new TrafficService();
+
+    final inicio = context.read<MiUbicacionBloc>().state.ubicacion;
+    final destino = context.read<MapaBloc>().state.ubicacionCentral;
+    
+
+    final trafficResponse = await trafficService.getCoordsInicioYFin(inicio, destino);
+    
+    final geometry = trafficResponse.routes[0].geometry;
+    final duracion = trafficResponse.routes[0].duration;
+    final distancia = trafficResponse.routes[0].distance;
+
+
+
+    // Decodificar los puntos
+
+    final points = Poly.Polyline.Decode(
+      encodedString: geometry,
+      precision: 6,
+    );
+
+    final temp = points;
+
   }
 }
