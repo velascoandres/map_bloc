@@ -30,7 +30,7 @@ class SearchBar extends StatelessWidget {
 
           //
 
-          if (resultado.manual) {
+          if (resultado.manual == true) {
             busquedaBloc.add(OnActivarMarcadorManual());
           } else if (resultado.cancelo) {
             busquedaBloc.add(OnDesactivarMarcadorManual());

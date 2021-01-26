@@ -85,8 +85,11 @@ class _BuidlMarcadorManual extends StatelessWidget {
   }
 
   void calcularDestino(BuildContext context) async {
+    calculandoAlerta(context);
+
     final trafficService = new TrafficService();
     final mapaBloc = BlocProvider.of<MapaBloc>(context);
+    final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
 
     final inicio = context.read<MiUbicacionBloc>().state.ubicacion;
     final destino = mapaBloc.state.ubicacionCentral;
@@ -112,6 +115,11 @@ class _BuidlMarcadorManual extends StatelessWidget {
         distancia,
         duracion,
       ),
+    );
+    Navigator.of(context).pop();
+    // Quitar el confirmar destino, marcador y el boton para regresar
+    busquedaBloc.add(
+      OnDesactivarMarcadorManual(),
     );
   }
 
