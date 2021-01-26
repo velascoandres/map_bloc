@@ -75,20 +75,24 @@ class _MapaPageState extends State<MapaPage> {
 
     // return Text('${state.ubicacion.latitude}, ${state.ubicacion.longitude}');
 
-    return GoogleMap(
-      initialCameraPosition: camaraPosicion,
-      mapType: MapType.normal,
-      compassEnabled: true,
-      myLocationEnabled: true,
-      zoomControlsEnabled: false,
-      myLocationButtonEnabled: false,
-      onMapCreated: mapaBloc.initMapa,
-      polylines: mapaBloc.state.polylines.values.toSet(),
-      onCameraMove: (CameraPosition position) {
-        this.ultimaPosicion = position.target;
-      },
-      onCameraIdle: () {
-        mapaBloc.add(OnMovioMapa(this.ultimaPosicion));
+    return BlocBuilder<MapaBloc, MapaState>(
+      builder: (context, _) {
+        return GoogleMap(
+          initialCameraPosition: camaraPosicion,
+          mapType: MapType.normal,
+          compassEnabled: true,
+          myLocationEnabled: true,
+          zoomControlsEnabled: false,
+          myLocationButtonEnabled: false,
+          onMapCreated: mapaBloc.initMapa,
+          polylines: mapaBloc.state.polylines.values.toSet(),
+          onCameraMove: (CameraPosition position) {
+            this.ultimaPosicion = position.target;
+          },
+          onCameraIdle: () {
+            mapaBloc.add(OnMovioMapa(this.ultimaPosicion));
+          },
+        );
       },
     );
   }

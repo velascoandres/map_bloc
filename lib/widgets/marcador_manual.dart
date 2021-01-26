@@ -74,9 +74,7 @@ class _BuidlMarcadorManual extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-
-                  this.calcularDestino(context);
-
+                this.calcularDestino(context);
               },
               minWidth: width - 120,
             ),
@@ -86,30 +84,42 @@ class _BuidlMarcadorManual extends StatelessWidget {
     );
   }
 
-  void calcularDestino(BuildContext context) async{
-
+  void calcularDestino(BuildContext context) async {
     final trafficService = new TrafficService();
+    final mapaBloc = BlocProvider.of<MapaBloc>(context);
 
     final inicio = context.read<MiUbicacionBloc>().state.ubicacion;
-    final destino = context.read<MapaBloc>().state.ubicacionCentral;
-    
+    final destino = mapaBloc.state.ubicacionCentral;
 
-    final trafficResponse = await trafficService.getCoordsInicioYFin(inicio, destino);
-    
+    final trafficResponse =
+        await trafficService.getCoordsInicioYFin(inicio, destino);
+
     final geometry = trafficResponse.routes[0].geometry;
     final duracion = trafficResponse.routes[0].duration;
     final distancia = trafficResponse.routes[0].distance;
 
-
-
     // Decodificar los puntos
-
     final points = Poly.Polyline.Decode(
       encodedString: geometry,
       precision: 6,
     );
 
-    final temp = points;
+    final puntosConvertidos = this.convertirLatLng(points);
 
+    mapaBloc.add(
+      OnRutaInicioDestino(
+        puntosConvertidos,
+        distancia,
+        duracion,
+      ),
+    );
+  }
+
+  List<LatLng> convertirLatLng(Poly.Polyline puntos) {
+    return puntos.decodedCoords.map(
+      (List<double> coords) {
+        return new LatLng(coords[0], coords[1]);
+      },
+    ).toList();
   }
 }

@@ -23,6 +23,12 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     width: 4,
   );
 
+  Polyline _miRutaDestino = new Polyline(
+    polylineId: PolylineId('mi_ruta_destino'),
+    color: Colors.yellowAccent,
+    width: 4,
+  );
+
   void initMapa(GoogleMapController controller) {
     if (!state.mapaListo) {
       this._mapController = controller;
@@ -50,9 +56,25 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
       yield* this._onMarcarRecorrido(event);
     } else if (event is OnSeguirUbicacion) {
       yield* this._onSeguirUbicacion(event);
-    }else if (event is OnMovioMapa){
+    } else if (event is OnMovioMapa) {
       yield* this._onMovioMapa(event);
+    } else if (event is OnRutaInicioDestino) {
+      yield* this._onRutaInicioDestino(event);
     }
+  }
+
+  Stream<MapaState> _onRutaInicioDestino(OnRutaInicioDestino event) async* {
+    this._miRutaDestino = this._miRutaDestino.copyWith(
+          pointsParam: event.rutaCoordenadas,
+        );
+
+    print(event.rutaCoordenadas);
+    final currentPolylines = state.polylines;
+    currentPolylines['mi_ruta_destino'] = this._miRutaDestino;
+
+    yield state.copyWith(
+      polylines: currentPolylines,
+    );
   }
 
   Stream<MapaState> _onNuevaUbicacion(OnNuevaUbicacion event) async* {
@@ -97,12 +119,9 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     );
   }
 
-  Stream<MapaState> _onMovioMapa(OnMovioMapa event) async*{
-
-
+  Stream<MapaState> _onMovioMapa(OnMovioMapa event) async* {
     yield state.copyWith(
       ubicacionCentral: event.centroMapa,
     );
-
   }
 }
