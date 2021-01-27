@@ -19,12 +19,13 @@ class SearchBar extends StatelessWidget {
   Widget buildSearchBar(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final BusquedaBloc busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
+    final MiUbicacionBloc miUbicacionBloc = BlocProvider.of<MiUbicacionBloc>(context);
     return SafeArea(
       child: GestureDetector(
         onTap: () async {
           final resultado = await showSearch(
             context: context,
-            delegate: SearchDestionation(),
+            delegate: SearchDestionation(miUbicacionBloc.state.ubicacion),
           );
           this.retornoBusqueda(context, resultado);
 
