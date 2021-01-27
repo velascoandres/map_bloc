@@ -20,7 +20,8 @@ class TrafficService {
   final _apiKey =
       'pk.eyJ1IjoidmVsYXNjb2FuZHJzIiwiYSI6ImNrZ3BncWE4ZjA5czUyenFxMmM1MTh2b2sifQ.o6faeXYecXpVa01RabAilQ';
 
-  Future<DrivingResponse> getCoordsInicioYFin(LatLng inicio, LatLng destino) async {
+  Future<DrivingResponse> getCoordsInicioYFin(
+      LatLng inicio, LatLng destino) async {
     final coordsString =
         '${inicio.longitude},${inicio.latitude};${destino.longitude},${destino.latitude}';
     final url = '${this.baseUrl}/mapbox/driving/$coordsString';
@@ -39,21 +40,23 @@ class TrafficService {
     return data;
   }
 
-
-
-  Future<GeocodingResponse> obtenerDirecciones(String busqueda, LatLng proximidad) async {
+  Future<GeocodingResponse> obtenerDirecciones(
+      String busqueda, LatLng proximidad) async {
+    try {
       final url = '${this.baseUrlGeocoding}/mapbox.places/$busqueda.json';
       final resp = await this._dio.get(
-      url,
-      queryParameters: {
-        'access_token': this._apiKey,
-        'autocomplete': 'true',
-        'proximity': '${proximidad.longitude},${proximidad.latitude}',
-        'language': 'es',
-      },
-    );
+        url,
+        queryParameters: {
+          'access_token': this._apiKey,
+          'autocomplete': 'true',
+          'proximity': '${proximidad.longitude},${proximidad.latitude}',
+          'language': 'es',
+        },
+      );
 
-    return geocodingResponseFromJson(resp.data);
+      return geocodingResponseFromJson(resp.data);
+    } catch (error) {
+      return GeocodingResponse(features: []);
+    }
   }
-
 }
