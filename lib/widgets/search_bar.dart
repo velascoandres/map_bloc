@@ -19,6 +19,9 @@ class SearchBar extends StatelessWidget {
   Widget buildSearchBar(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final BusquedaBloc busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
+
+    final historial = busquedaBloc.state.historial;
+
     final MiUbicacionBloc miUbicacionBloc =
         BlocProvider.of<MiUbicacionBloc>(context);
     return SafeArea(
@@ -26,7 +29,7 @@ class SearchBar extends StatelessWidget {
         onTap: () async {
           final resultado = await showSearch(
             context: context,
-            delegate: SearchDestionation(miUbicacionBloc.state.ubicacion),
+            delegate: SearchDestionation(miUbicacionBloc.state.ubicacion, historial),
           );
           this.retornoBusqueda(context, resultado);
         },
@@ -72,11 +75,6 @@ class SearchBar extends StatelessWidget {
 
     calculandoAlerta(context);
     // Calcular la ruta en base al valor result
-    // if (result.manual == true) {
-    //   busquedaBloc.add(OnActivarMarcadorManual());
-    // } else if (result.cancelo) {
-    //   busquedaBloc.add(OnDesactivarMarcadorManual());
-    // }
     final trafficService = new TrafficService();
 
     final inicio = ubicacionBloc.state.ubicacion;
@@ -97,6 +95,12 @@ class SearchBar extends StatelessWidget {
         .toList();
     mapaBloc.add(
       OnRutaInicioDestino(rutaCoords, distancia, duracion),
+    );
+
+    busquedaBloc.add(
+      OnAgregarHistorial(
+        result,
+      ),
     );
 
     Navigator.of(context).pop();

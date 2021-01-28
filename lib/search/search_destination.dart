@@ -9,11 +9,11 @@ class SearchDestionation extends SearchDelegate<SearchResult> {
   final String searchFieldLabel;
   final TrafficService _trafficService;
   final LatLng proximidad;
+  final List<SearchResult> historial;
 
-  SearchDestionation(this.proximidad)
+  SearchDestionation(this.proximidad, this.historial)
       : this.searchFieldLabel = 'Buscar',
         this._trafficService = new TrafficService();
-
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -54,10 +54,55 @@ class SearchDestionation extends SearchDelegate<SearchResult> {
               );
             },
           ),
+          ...buildHistorico(context)
         ],
       );
     }
     return this._construirResultadosSugerencias();
+  }
+
+  List<Widget> buildHistorico(BuildContext context) {
+    if (this.historial.length == 0) {
+      return [
+        Container(),
+      ];
+    }
+
+    final historialWidgets = this.historial.map(
+      (historico) {
+        return ListTile(
+          leading: Icon(Icons.history),
+          title: Text(historico.nombreDestino),
+          subtitle: Text(historico.descripcion),
+          onTap: () {
+            this.close(
+              context,
+              SearchResult(
+                cancelo: false,
+                manual: false,
+                descripcion: historico.descripcion,
+                nombreDestino: historico.nombreDestino,
+                position: historico.position,
+              ),
+            );
+          },
+        );
+      },
+    ).toList();
+    return [
+      Divider(),
+      Container(
+        padding: EdgeInsets.only(left: 20),
+        child: Text(
+          'Destinos anteriores',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+      ),
+      Container(
+        height: 10,
+      ),
+      ...historialWidgets,
+    ];
   }
 
   Widget _construirResultadosSugerencias() {
