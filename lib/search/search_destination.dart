@@ -18,7 +18,7 @@ class SearchDestionation extends SearchDelegate<SearchResult> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: Icon(Icons.cleaning_services),
         onPressed: () => this.query = '',
       ),
     ];
@@ -88,7 +88,18 @@ class SearchDestionation extends SearchDelegate<SearchResult> {
                 leading: Icon(Icons.place),
                 title: Text(lugar.textEs),
                 subtitle: Text(lugar.placeNameEs),
-                onTap: () {},
+                onTap: () {
+                  this.close(
+                    context,
+                    SearchResult(
+                      cancelo: false,
+                      manual: false,
+                      position: LatLng(lugar.center[1], lugar.center[0]),
+                      nombreDestino: lugar.textEs,
+                      descripcion: lugar.placeNameEs,
+                    ),
+                  );
+                },
               );
             },
           );

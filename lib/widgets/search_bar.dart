@@ -9,7 +9,7 @@ class SearchBar extends StatelessWidget {
           return FadeInDown(
             duration: Duration(milliseconds: 500),
             child: this.buildSearchBar(context),
-            );
+          );
         }
         return Container();
       },
@@ -19,7 +19,8 @@ class SearchBar extends StatelessWidget {
   Widget buildSearchBar(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final BusquedaBloc busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
-    final MiUbicacionBloc miUbicacionBloc = BlocProvider.of<MiUbicacionBloc>(context);
+    final MiUbicacionBloc miUbicacionBloc =
+        BlocProvider.of<MiUbicacionBloc>(context);
     return SafeArea(
       child: GestureDetector(
         onTap: () async {
@@ -28,14 +29,6 @@ class SearchBar extends StatelessWidget {
             delegate: SearchDestionation(miUbicacionBloc.state.ubicacion),
           );
           this.retornoBusqueda(context, resultado);
-
-          //
-
-          if (resultado.manual == true) {
-            busquedaBloc.add(OnActivarMarcadorManual());
-          } else if (resultado.cancelo) {
-            busquedaBloc.add(OnDesactivarMarcadorManual());
-          }
         },
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 30),
@@ -61,12 +54,51 @@ class SearchBar extends StatelessWidget {
     );
   }
 
-  void retornoBusqueda(BuildContext context, SearchResult result) {
-    if (result.cancelo) return;
+  Future<void> retornoBusqueda(
+      BuildContext context, SearchResult result) async {
+    final BusquedaBloc busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
+    final MiUbicacionBloc ubicacionBloc =
+        BlocProvider.of<MiUbicacionBloc>(context);
+    final MapaBloc mapaBloc = BlocProvider.of<MapaBloc>(context);
 
-    if (result.manual) {
-      BlocProvider.of<BusquedaBloc>(context).add(OnActivarMarcadorManual());
+    if (result.cancelo) {
+      busquedaBloc.add(OnDesactivarMarcadorManual());
       return;
     }
+    if (result.manual) {
+      busquedaBloc.add(OnActivarMarcadorManual());
+      return;
+    }
+
+    calculandoAlerta(context);
+    // Calcular la ruta en base al valor result
+    // if (result.manual == true) {
+    //   busquedaBloc.add(OnActivarMarcadorManual());
+    // } else if (result.cancelo) {
+    //   busquedaBloc.add(OnDesactivarMarcadorManual());
+    // }
+    final trafficService = new TrafficService();
+
+    final inicio = ubicacionBloc.state.ubicacion;
+    final destino = result.position;
+
+    final drivingResponse =
+        await trafficService.getCoordsInicioYFin(inicio, destino);
+
+    final geometry = drivingResponse.routes[0].geometry;
+    final duracion = drivingResponse.routes[0].duration;
+    final distancia = drivingResponse.routes[0].distance;
+
+    final points = Poly.Polyline.Decode(encodedString: geometry, precision: 6);
+    final List<LatLng> rutaCoords = points.decodedCoords
+        .map(
+          (point) => LatLng(point[0], point[1]),
+        )
+        .toList();
+    mapaBloc.add(
+      OnRutaInicioDestino(rutaCoords, distancia, duracion),
+    );
+
+    Navigator.of(context).pop();
   }
 }
