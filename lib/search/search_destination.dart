@@ -65,10 +65,10 @@ class SearchDestionation extends SearchDelegate<SearchResult> {
       return Container();
     }
 
-    return FutureBuilder(
-      future: this
-          ._trafficService
-          .obtenerDirecciones(this.query.trim(), this.proximidad),
+    this._trafficService.getSugerenciasPorQuery(this.query.trim(), proximidad);
+
+    return StreamBuilder(
+      stream: this._trafficService.sugerenciasStream,
       builder: (BuildContext context,
           AsyncSnapshot<GeoModel.GeocodingResponse> snapshot) {
         if (!snapshot.hasData) {

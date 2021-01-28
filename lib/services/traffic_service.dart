@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_bloc/helpers/debouncer.dart';
 import 'package:map_bloc/models/geocoding_response.dart';
 import 'package:map_bloc/models/traffic_response.dart';
 
@@ -8,6 +11,12 @@ class TrafficService {
   TrafficService._privateContructor();
 
   static final TrafficService _instance = TrafficService._privateContructor();
+
+  final debouncer = Debouncer<String>(duration: Duration(milliseconds: 400));
+  final StreamController<GeocodingResponse> _sugerenciasStreamController =
+      new StreamController<GeocodingResponse>.broadcast();
+
+  Stream<GeocodingResponse> get sugerenciasStream => _sugerenciasStreamController.stream;
 
   factory TrafficService() {
     return _instance;
@@ -59,4 +68,20 @@ class TrafficService {
       return GeocodingResponse(features: []);
     }
   }
+
+  void getSugerenciasPorQuery( String busqueda, LatLng proximidad ) {
+
+  debouncer.value = '';
+  debouncer.onValue = ( value ) async {
+    final resultados = await this.obtenerDirecciones(value, proximidad);
+    this._sugerenciasStreamController.add(resultados);
+  };
+
+  final timer = Timer.periodic(Duration(milliseconds: 200), (_) {
+    debouncer.value = busqueda;
+  });
+
+  Future.delayed(Duration(milliseconds: 201)).then((_) => timer.cancel()); 
+
+}
 }
