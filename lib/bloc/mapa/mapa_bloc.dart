@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_bloc/helpers/helpers.dart';
 import 'package:meta/meta.dart';
 
 import 'package:map_bloc/themes/uber_map_theme.dart';
@@ -72,10 +73,16 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     final currentPolylines = state.polylines;
     currentPolylines['mi_ruta_destino'] = this._miRutaDestino;
 
+    // Icono Inicio
+
+    final iconoInicio = await getAssetImageMarker();
+    final iconoDestino = await getNetworkImageMarker();
+
     // Marcadores
     final markerInicio = new Marker(
       markerId: MarkerId('inicio'),
       position: event.rutaCoordenadas[0],
+      icon: iconoInicio,
       infoWindow: InfoWindow(
         title: 'Tu origen',
         snippet: 'Duración recorrido: ${(event.duracion / 60).floor()} minutos',
@@ -91,6 +98,7 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     final markerDestino = new Marker(
       markerId: MarkerId('destino'),
       position: event.rutaCoordenadas[ultimoIndice],
+      icon: iconoDestino,
       infoWindow: InfoWindow(
         title: event.nombreDestino,
         snippet: 'Distancia: $kilometros Kilómetros'
