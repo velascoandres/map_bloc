@@ -96,7 +96,7 @@ class _BuidlMarcadorManual extends StatelessWidget {
 
 
     // Obtener informacion del destino
-    trafficService.obtenerInfoCoordenadas(destino);
+    final reverseGeoCodingResp = await trafficService.obtenerInfoCoordenadas(destino);
 
     final trafficResponse =
         await trafficService.getCoordsInicioYFin(inicio, destino);
@@ -104,6 +104,7 @@ class _BuidlMarcadorManual extends StatelessWidget {
     final geometry = trafficResponse.routes[0].geometry;
     final duracion = trafficResponse.routes[0].duration;
     final distancia = trafficResponse.routes[0].distance;
+    final nombreDestino = reverseGeoCodingResp.features[0].textEs;
 
     // Decodificar los puntos
     final points = Poly.Polyline.Decode(
@@ -118,6 +119,7 @@ class _BuidlMarcadorManual extends StatelessWidget {
         puntosConvertidos,
         distancia,
         duracion,
+        nombreDestino,
       ),
     );
     Navigator.of(context).pop();

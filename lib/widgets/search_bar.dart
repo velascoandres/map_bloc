@@ -29,7 +29,8 @@ class SearchBar extends StatelessWidget {
         onTap: () async {
           final resultado = await showSearch(
             context: context,
-            delegate: SearchDestionation(miUbicacionBloc.state.ubicacion, historial),
+            delegate:
+                SearchDestionation(miUbicacionBloc.state.ubicacion, historial),
           );
           this.retornoBusqueda(context, resultado);
         },
@@ -93,8 +94,15 @@ class SearchBar extends StatelessWidget {
           (point) => LatLng(point[0], point[1]),
         )
         .toList();
+
+    // Coding Reverse
+
+    final reverseGeoCodingResp =
+        await trafficService.obtenerInfoCoordenadas(destino);
+
+    final nombreDestino = reverseGeoCodingResp.features[0].textEs;
     mapaBloc.add(
-      OnRutaInicioDestino(rutaCoords, distancia, duracion),
+      OnRutaInicioDestino(rutaCoords, distancia, duracion, nombreDestino),
     );
 
     busquedaBloc.add(

@@ -10,8 +10,8 @@ class OnNuevaUbicacion extends MapaEvent {
   OnNuevaUbicacion(this.ubicacion);
 }
 
-
 class OnMarcarRecorrido extends MapaEvent {}
+
 class OnSeguirUbicacion extends MapaEvent {}
 
 class OnMovioMapa extends MapaEvent {
@@ -19,12 +19,16 @@ class OnMovioMapa extends MapaEvent {
   OnMovioMapa(this.centroMapa);
 }
 
-
 class OnRutaInicioDestino extends MapaEvent {
   final List<LatLng> rutaCoordenadas;
   final double distancia;
   final double duracion;
+  final String nombreDestino;
 
-
-  OnRutaInicioDestino(this.rutaCoordenadas, this.distancia, this.duracion);
+  OnRutaInicioDestino(
+    this.rutaCoordenadas,
+    this.distancia,
+    this.duracion,
+    this.nombreDestino,
+  );
 }

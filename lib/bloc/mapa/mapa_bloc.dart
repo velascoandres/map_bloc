@@ -78,15 +78,23 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
       position: event.rutaCoordenadas[0],
       infoWindow: InfoWindow(
         title: 'Tu origen',
-        snippet: 'Este es el punto inicial de partida',
+        snippet: 'Duración recorrido: ${(event.duracion / 60).floor()} minutos',
         onTap: (){},
         anchor: Offset(0.5, 0),
       ),
     );
     final ultimoIndice = event.rutaCoordenadas.length - 1;
+    // marcador destino
+    double kilometros = (event.distancia / 10).floor().toDouble()/ 100;
+    
+    
     final markerDestino = new Marker(
       markerId: MarkerId('destino'),
       position: event.rutaCoordenadas[ultimoIndice],
+      infoWindow: InfoWindow(
+        title: event.nombreDestino,
+        snippet: 'Distancia: $kilometros Kilómetros'
+      ),
     );
 
     final nuevosMarcadores = {...state.markers};
