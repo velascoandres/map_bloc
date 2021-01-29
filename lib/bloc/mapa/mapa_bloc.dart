@@ -81,6 +81,10 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     final markerDestino = new Marker(
       markerId: MarkerId('destino'),
       position: event.rutaCoordenadas[ultimoIndice],
+      infoWindow: InfoWindow(
+        title: 'Tu origen',
+        snippet: 'Este es el punto inicial de partida',
+      ),
     );
 
     final nuevosMarcadores = {...state.markers};
