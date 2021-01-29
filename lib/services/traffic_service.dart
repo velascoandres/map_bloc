@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_bloc/helpers/debouncer.dart';
 import 'package:map_bloc/models/geocoding_response.dart';
+import 'package:map_bloc/models/reverse_geocoding_response.dart';
 import 'package:map_bloc/models/traffic_response.dart';
 
 class TrafficService {
@@ -16,7 +17,8 @@ class TrafficService {
   final StreamController<GeocodingResponse> _sugerenciasStreamController =
       new StreamController<GeocodingResponse>.broadcast();
 
-  Stream<GeocodingResponse> get sugerenciasStream => _sugerenciasStreamController.stream;
+  Stream<GeocodingResponse> get sugerenciasStream =>
+      _sugerenciasStreamController.stream;
 
   factory TrafficService() {
     return _instance;
@@ -69,19 +71,34 @@ class TrafficService {
     }
   }
 
-  void getSugerenciasPorQuery( String busqueda, LatLng proximidad ) {
+  Future<ReverseGeocodingResponse> obtenerInfoCoordenadas(LatLng destinoCoords) async {
+    try {
+      final url = '${this.baseUrlGeocoding}/mapbox.places/${destinoCoords.longitude},${destinoCoords.latitude}.json';
+      final resp = await this._dio.get(
+        url,
+        queryParameters: {
+          'access_token': this._apiKey,
+          'language': 'es',
+        },
+      );
+      final data = reverseGeocodingResponseFromJson(resp.data); 
+      return data;
+    } catch (error) {
+      return ReverseGeocodingResponse(features: []);
+    }
+  }
 
-  debouncer.value = '';
-  debouncer.onValue = ( value ) async {
-    final resultados = await this.obtenerDirecciones(value, proximidad);
-    this._sugerenciasStreamController.add(resultados);
-  };
+  void getSugerenciasPorQuery(String busqueda, LatLng proximidad) {
+    debouncer.value = '';
+    debouncer.onValue = (value) async {
+      final resultados = await this.obtenerDirecciones(value, proximidad);
+      this._sugerenciasStreamController.add(resultados);
+    };
 
-  final timer = Timer.periodic(Duration(milliseconds: 200), (_) {
-    debouncer.value = busqueda;
-  });
+    final timer = Timer.periodic(Duration(milliseconds: 200), (_) {
+      debouncer.value = busqueda;
+    });
 
-  Future.delayed(Duration(milliseconds: 201)).then((_) => timer.cancel()); 
-
-}
+    Future.delayed(Duration(milliseconds: 201)).then((_) => timer.cancel());
+  }
 }
