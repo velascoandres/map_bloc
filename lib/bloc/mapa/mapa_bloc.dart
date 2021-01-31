@@ -77,7 +77,8 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
 
     //final iconoInicio = await getAssetImageMarker();
     final iconoInicio = await getMarkerInicioIcon(event.duracion.toInt());
-    final iconoDestino = await getNetworkImageMarker();
+    final iconoDestino =
+        await getMarkerDestinoIcon(event.nombreDestino, event.distancia);
     // final iconoDestino = await getNetworkImageMarker();
 
     // Marcadores
@@ -89,23 +90,22 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
       infoWindow: InfoWindow(
         title: 'Tu origen',
         snippet: 'Duración recorrido: ${(event.duracion / 60).floor()} minutos',
-        onTap: (){},
+        onTap: () {},
         anchor: Offset(0.5, 0),
       ),
     );
     final ultimoIndice = event.rutaCoordenadas.length - 1;
     // marcador destino
-    double kilometros = (event.distancia / 10).floor().toDouble()/ 100;
-    
-    
+    double kilometros = (event.distancia / 10).floor().toDouble() / 100;
+
     final markerDestino = new Marker(
       markerId: MarkerId('destino'),
+      anchor: Offset(0.1, 0.9),
       position: event.rutaCoordenadas[ultimoIndice],
       icon: iconoDestino,
       infoWindow: InfoWindow(
-        title: event.nombreDestino,
-        snippet: 'Distancia: $kilometros Kilómetros'
-      ),
+          title: event.nombreDestino,
+          snippet: 'Distancia: $kilometros Kilómetros'),
     );
 
     final nuevosMarcadores = {...state.markers};

@@ -21,3 +21,25 @@ Future<BitmapDescriptor> getMarkerInicioIcon(int segundos) async{
   );
 
 }
+
+
+
+Future<BitmapDescriptor> getMarkerDestinoIcon(String descripcion, double metros) async{
+  final recorder = new PictureRecorder();
+  final canvas = new Canvas(recorder);
+
+  final size = new Size(350, 150);
+
+
+  final markerInicio = new MarkerDestinoPainter(descripcion, metros);
+  markerInicio.paint(canvas, size);
+
+  final picture = recorder.endRecording();
+  final image = await picture.toImage(size.width.toInt(), size.height.toInt());
+  final byteData = await image.toByteData(format: ImageByteFormat.png);
+
+  return BitmapDescriptor.fromBytes(
+    byteData.buffer.asUint8List()
+  );
+
+}
