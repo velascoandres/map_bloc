@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+part of 'custom_markers.dart';
+
 
 class MarkerDestinoPainter extends CustomPainter {
   final String descripcion;

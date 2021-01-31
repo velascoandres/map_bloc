@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:map_bloc/custom_markers/marker_destino.dart';
-import 'package:map_bloc/custom_markers/marker_inicio.dart';
+import 'package:map_bloc/custom_markers/custom_markers.dart';
 
 class TestMarkerPage extends StatelessWidget {
   @override
